@@ -1,6 +1,6 @@
 {
   "name": "nward",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A library to simplify serial communication between Arduino-compatible microcontrollers and NW.js.",
   "module": "dist/nward.esm.min.js",
   "author": "Jean-Philippe Côté <jp@djip.co>",
@@ -9,11 +9,8 @@
     "build": "rollup --config",
     "lint": "eslint src",
     "upload": "npm publish",
-
-
     "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags",
-
     "release:patch": "npm run lint && npm version patch && npm run build && git add -A dist && npm run upload"
   },
   "keywords": [
