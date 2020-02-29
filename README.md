@@ -1,8 +1,8 @@
 # nward
 
 The **Nward** library facilitates serial communication between [NW.js](https://nwjs.io) and 
-Arduino-compatible microcontrollers. It does so without relying on the `serialport` module which can 
-be difficult to recompile for use with NW.js. 
+Arduino-compatible microcontrollers. It does so without relying on the `serialport` which has to be 
+specifically recompiled for NW.js (which might have you pulling your hair out).
 
 ## Installation & usage
 
@@ -23,4 +23,5 @@ curly quotes when importing.
 
 ## API Reference
 
-Coming soon.
+The complete API reference is available at 
+[https://djipco.github.io/nward/](https://djipco.github.io/nward/).
