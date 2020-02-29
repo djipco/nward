@@ -6,12 +6,10 @@
   "author": "Jean-Philippe Côté <jp@djip.co>",
   "license": "GPLv3",
   "scripts": {
-    "build": "rollup --config",
+    "build": "rollup --config && git add -A dist",
     "lint": "eslint src",
     "upload": "npm publish",
-    "version": "npm run build && git add -A dist",
-    "postversion": "git push && git push --tags",
-    "release:patch": "npm run lint && npm version patch && npm run build && git add -A dist && npm run upload"
+    "release:patch": "npm run lint && npm version patch && npm run build && npm run upload && git push && git push --tags"
   },
   "keywords": [
     "arduino",
