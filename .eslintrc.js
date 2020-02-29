@@ -8,7 +8,9 @@ module.exports = {
   },
 
   "globals": {
-    "chrome": "readonly"
+    "chrome": "readonly",
+    "DataBits": "readonly",
+    "ParityBits": "readonly"
   },
 
   "parserOptions": {
