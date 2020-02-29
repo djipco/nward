@@ -16,7 +16,7 @@ Once installed, you simply need to import it. The library is bundled as an ECMAS
 import it, use this line at the top of your (module-compatible) script: 
 
 ```javascript
-import {Nward} from "node_modules/nward/dist/nward.esm.min.js";
+import {Nward} from "./node_modules/nward/dist/nward.esm.min.js";
 ```
 Note that the library (purposely) does not provide a default export. This means you have to use 
 curly quotes when importing.
