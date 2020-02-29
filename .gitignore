@@ -1,0 +1,52 @@
+### Logs ###########################################################################################
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+### Cachce directories #############################################################################
+.npm
+.yarn-integrity
+.cache
+.publish
+
+### Optional eslint cache ##########################################################################
+.eslintcache
+
+### Dependency Directories #########################################################################
+/node_modules
+
+### Editors ########################################################################################
+/.idea
+modules.xml
+*.ipr
+*.iml
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+### System #########################################################################################
+*.DS_Store
+Icon?
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+### Tests & coverage ###############################################################################
+.nyc_output
+.coverage
+benchmarks
+
+### Circle CI ######################################################################################
+.circleci
+
+### Project specific ###############################################################################
+/playground
