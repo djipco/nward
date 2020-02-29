@@ -1,6 +1,6 @@
 {
   "name": "nward",
-  "version": "0.0.17",
+  "version": "0.0.0",
   "description": "A library to simplify serial communication between Arduino-compatible microcontrollers and NW.js.",
   "module": "dist/nward.esm.min.js",
   "author": "Jean-Philippe Côté <jp@djip.co>",
