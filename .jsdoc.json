@@ -1,0 +1,38 @@
+{
+
+  "tags": {
+    "allowUnknownTags": true
+  },
+
+  "opts": {
+    "destination": "./docs",
+    "template": "./node_modules/foodoc/template"
+  },
+
+  "sourceType": "module",
+
+  "plugins": [
+    "./node_modules/jsdoc-export-default-interop/dist/index.js",
+    "plugins/markdown"
+  ],
+
+  "templates": {
+
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "default": {
+      "outputSourceFiles": true
+    },
+
+    "dateFormat": "MMMM Do YYYY, H:mm:ss",
+
+    "systemName": "Nward",
+    "systemSummary": "A library to simplify serial communication between Arduino-compatible microcontrollers and NW.js.\n",
+    "copyright": "Nward is released under the <a href=\"https://www.gnu.org/licenses/gpl-3.0.en.html\">GPLv3 license</a>.",
+    "collapseSymbols": true,
+
+    "sort": "longname, linenum, version, since"
+
+  }
+
+}

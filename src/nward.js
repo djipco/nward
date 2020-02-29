@@ -3,28 +3,75 @@ const str2ab = require("string-to-arraybuffer");
 import {EventEmitter} from "../node_modules/djipevents/dist/djipevents.esm.min.js";
 import isArrayBuffer from "../node_modules/is-array-buffer/dist/is-array-buffer.esm.js";
 
+/**
+ * The `Nward` class provides methods to communicate via serial to an Arduino-compatible device. It
+ * extends the [EventEmitter](https://djipco.github.io/djipevents/EventEmitter.html) class from
+ * [djipevents](https://github.com/djipco/djipevents).
+ */
 export class Nward extends EventEmitter{
 
   constructor() {
+
     super();
+
+    /**
+     * @private
+     */
     this.buffer = "";
+
+    /**
+     * @private
+     */
     this.listeners = {};
+
+    /**
+     * @private
+     */
     this.connectionId = null;
+
+    /**
+     * The serial port currently in use (e.g. `COM3`, `/dev/cu.usbmodem2101`, etc.). When no
+     * connection is active, this is set to `null`.
+     *
+     * @type {?string}
+     * @readonly
+     */
     this.port = null;
+
   }
 
   /**
-   * Tries to open a serial connection to the Arduino-compatible device hooked up to the specified
-   * port. If no port is specified, it tries to connect to the last port in the list obtained by
-   * calling [getDevices()]{@link Nward#getDevices()}.
+   * The `ConnectionInfo` object provides details about a serial connexion. You can view all details
+   * about the
+   * [ConnectionInfo]{@linkcode https://developer.chrome.com/apps/serial#type-ConnectionInfo} object
+   * of the Chrome App Serial documentation.
+   *
+   * @typedef {Object} Nward~ConnectionInfo
+   * @property {integer} connectionId
+   * @property {boolean} paused
+   * @property {boolean} persistent
+   * @property {string} name
+   * @property {integer} bufferSize
+   * @property {integer} receiveTimeout
+   * @property {integer} sendTimeout
+   * @property {integer} [bitrate]
+   * @property {DataBits} [dataBits]
+   * @property {ParityBits} [parityBit]
+   * @property {StopBits} [StopBits]
+   * @property {boolean} [ctsFlowControl]
+   */
+
+  /**
+   * Tries to open a serial connection to the Arduino-compatible device hooked up to the port
+   * specified in the `options` parameter. If no port is specified, it tries to connect to the last
+   * port in the list obtained by calling {@link Nward.getDevices}.
    *
    * This is an asynchronous operation. When it succeeds, it returns a promise fulfilled with a
-   * [ConnectionInfo()]{@link https://developer.chrome.com/apps/serial#type-ConnectionInfo} object
-   * providing information about the established connection.
+   * {@link Nward~ConnectionInfo} object providing information about the established connection.
    *
    * @param {Object} [options={}]
-   * @param {string} [options.port] The port to connect to. On Windows, it will look like this:
-   * `COM3`. On Linux and macOS, it will tippically look like this: `/dev/cu.usbmodem2101`.
+   * @param {string} [options.port] The port to connect to (`"COM3"`, `"/dev/cu.usbmodem2101"`,
+   * etc.)
    * @param {string} [options.bitrate=57600] The requested bitrate of the connection to be opened.
    * For compatibility with the widest range of hardware, this number should match one of
    * commonly-available bitrates such as:
@@ -41,7 +88,8 @@ export class Nward extends EventEmitter{
    *  * 57600 (default)
    *  * 115200
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<ConnectionInfo>} The promise is fulfilled with a
+   * {@link Nward~ConnectionInfo} object providing details about the connection.
    */
   async open(options = {}) {
 
@@ -79,10 +127,10 @@ export class Nward extends EventEmitter{
    * Device
    *
    * @typedef {Object} Nward~Device
-   * @property {string} path - Indicates whether the Courage component is present.
-   * @property {string} vendorId - Indicates whether the Power component is present.
-   * @property {string} productId - Indicates whether the Wisdom component is present.
-   * @property {string} displayName - Indicates whether the Wisdom component is present.
+   * @property {string} path
+   * @property {string} vendorId
+   * @property {string} productId
+   * @property {string} displayName
    */
 
   /**
