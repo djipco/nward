@@ -211,7 +211,7 @@ export class Nward extends EventEmitter{
    * string is sent.
    * @returns {Promise<SendInfo>}
    */
-  async send(data, appendNewline = true) {
+  async send(data, appendNewline = false) {
 
     let ab;
 
