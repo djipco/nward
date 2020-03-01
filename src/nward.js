@@ -218,8 +218,8 @@ export class Nward extends EventEmitter{
     if (isArrayBuffer(data)) {
       ab = data;
     } else {
+      if (appendNewline) data += "\n";
       ab = str2ab(data);
-      if (appendNewline) ab += "\n";
     }
 
     return new Promise(resolve => {
