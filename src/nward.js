@@ -1,4 +1,5 @@
 const str2ab = require("string-to-arraybuffer");
+const ab2str = require("arraybuffer-to-string");
 
 import {EventEmitter} from "../node_modules/djipevents/dist/djipevents.esm.min.js";
 import isArrayBuffer from "../node_modules/is-array-buffer/dist/is-array-buffer.esm.js";
@@ -25,7 +26,9 @@ export class Nward extends EventEmitter{
     this.listeners = {};
 
     /**
-     * @private
+     * The id of the current serial connection
+     * @type {?number}
+     * @readonly
      */
     this.connectionId = null;
 
@@ -91,7 +94,7 @@ export class Nward extends EventEmitter{
    * @returns {Promise<ConnectionInfo>} The promise is fulfilled with a
    * {@link Nward~ConnectionInfo} object providing details about the connection.
    */
-  async open(options = {}) {
+  async connect(options = {}) {
 
     if (options.port) {
       this.port = options.port;
@@ -102,7 +105,7 @@ export class Nward extends EventEmitter{
     }
 
     let defaults = {
-      bitrate: 57600,
+      bitrate: 115200,
     };
 
     options = Object.assign(defaults, options);
@@ -124,24 +127,28 @@ export class Nward extends EventEmitter{
   }
 
   /**
-   * Device
+   * This object provides information about a serial device.
    *
-   * @typedef {Object} Nward~Device
-   * @property {string} path
-   * @property {string} vendorId
-   * @property {string} productId
-   * @property {string} displayName
+   * @typedef {Object} Nward~DeviceInfo
+   * @property {string} path The device's system path. This should be passed as the `path` argument
+   * to `connect()` in order to connect to this device.
+   * @property {string} [vendorId] A PCI or USB vendor ID if one can be determined for the
+   * underlying device.
+   * @property {string} [productId] A USB product ID if one can be determined for the underlying
+   * device.
+   * @property {string} [displayName] A human-readable display name for the underlying device if one
+   * can be queried from the host driver.
    */
 
   /**
-   * Returns a list of sserial devices likely to be Arduino-compatible. This list will always
-   * include all Arduino-compatible devices but, depending on the platform, may also nclude other
-   * serial devices as well. If the `all` parameter is set to true, it will systematically return
+   * Returns a list of serial devices likely to be Arduino-compatible. This list will always
+   * include all Arduino-compatible devices but, depending on the platform, may also include other
+   * serial devices as well. If the `all` parameter is set to `true`, it will systematically return
    * all serial devices.
    *
    * @param {boolean} [all=false] Whether to return all serial devices or only Arduino-compatible
    * devices.
-   * @returns {Promise<array>} An array of Nward~Device objects describing the devices
+   * @returns {Promise<array>} An array of {@link Nward~DeviceInfo} objects describing the devices
    * found.
    */
   static async getDevices(all = false) {
@@ -149,12 +156,9 @@ export class Nward extends EventEmitter{
     return new Promise(resolve => {
 
       chrome.serial.getDevices(devices => {
-
         let found = devices;
-
         if (!all) found = devices.filter(device => /usb|acm|^com/i.test(device.path));
         resolve(found);
-
       });
 
     });
@@ -165,15 +169,18 @@ export class Nward extends EventEmitter{
    * Returns a promise fulfilled with an array of currently opened serial port connections owned by
    * the application.
    *
-   * @returns {Promise<array>}
+   * @returns {Promise<array>} The promise is fulfilled with an array of
+   * {@link Nward~ConnectionInfo} objects.
    */
   static async getSerialConnections() {
     return new Promise(resolve => chrome.serial.getConnections(resolve));
   }
 
   /**
+   * Retrieves the state of the currently-opened connection.
    *
-   * @returns {Promise<unknown>}
+   * @returns {Promise<ConnectionInfo>} The promise is fulfilled with a
+   * {@link Nward~ConnectionInfo} object providing details about the connection.
    */
   async getConnectionInfo() {
 
@@ -186,20 +193,33 @@ export class Nward extends EventEmitter{
   }
 
   /**
+   * This object provides information about the send operation.
+   *
+   * @typedef {Object} Nward~SendInfo
+   * @property {integer} bytesSent The number of bytes sent.
+   * @property {string} [error] An error code if an error occurred (disconnected, pending, timeout
+   * or system_error).
+   */
+
+  /**
    * Sends the specified data to the Arduino. The data can be a `string` or an `ArrayBuffer`. If
-   * it's a string, a newline will be appended at the end.
+   * it's a string, a newline will be appended at the end (unless `appendNewline` is set to
+   * `false`).
    *
    * @param {string|ArrayBuffer} data The data to send to the Arduino
-   * @returns {Promise<unknown>}
+   * @param {boolean} appendNewline Whether to automatically append a newline character when a
+   * string is sent.
+   * @returns {Promise<SendInfo>}
    */
-  async send(data) {
+  async send(data, appendNewline = true) {
 
     let ab;
 
     if (isArrayBuffer(data)) {
       ab = data;
     } else {
-      ab = str2ab(data + "\n");
+      ab = str2ab(data);
+      if (appendNewline) ab += "\n";
     }
 
     return new Promise(resolve => {
@@ -208,21 +228,31 @@ export class Nward extends EventEmitter{
 
   }
 
-  async sendInstruction(command, value) {
+  /**
+   * Sends a message to the connected Arduino-compatible device.
+   *
+   * @param {string} command
+   * @param {string|array} [value]
+   * @returns {Promise<SendInfo>}
+   */
+  async sendMessage(command, value) {
 
     if (!command) return Promise.reject("You must provide a command.");
 
     let instruction = command;
-    if (value) instruction += "=" + parseInt(value);
+    if (value) instruction += "=" + value;
     instruction += "\n";
 
     return this.send(instruction);
 
   }
 
+  /**
+   * @private
+   */
   onDataReceived(info) {
 
-    let lines = Nward.ab2str(info.data).split("\n");
+    let lines = ab2str(info.data).split("\n");
     lines[0] = this.buffer + lines[0];
     this.buffer = lines.pop();
 
@@ -233,12 +263,20 @@ export class Nward extends EventEmitter{
 
   }
 
+  /**
+   * @private
+   */
   onError(info) {
     this.emit("error", {connectionId: info.connectionId, code: info.error});
-    this.close();
+    this.disconnect();
   }
 
-  async close() {
+  /**
+   * Tries to disconnect the currently-active serial connection.
+   * @returns {Promise<boolean>} A promise fulfilled with a boolean value representing the result of
+   * the operation.
+   */
+  async disconnect() {
 
     return new Promise(resolve => {
 
@@ -255,9 +293,13 @@ export class Nward extends EventEmitter{
 
   }
 
-  static ab2str(buffer, encoding) {
-    if (encoding == null) encoding = "utf8";
-    return Buffer.from(buffer).toString(encoding);
+  /**
+   * Whether there is an active serial connection
+   * @type {boolean}
+   * @readonly
+   */
+  get connected() {
+    return !!this.connectionId;
   }
 
 }
