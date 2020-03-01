@@ -8,7 +8,7 @@
   "scripts": {
     "doc": "jsdoc -c ./.jsdoc.json -t ./node_modules/foodoc/template -R README.md -r ./src",
     "publish-doc": "gh-pages -d docs",
-    "build": "rollup --config && git add -A dist",
+    "build": "npm run publish-doc && rollup --config && git add -A dist docs",
     "lint": "eslint src",
     "upload": "npm publish",
     "release:patch": "npm run lint && npm version patch && npm run build && npm run upload && git push && git push --tags"
@@ -19,6 +19,7 @@
     "nwjs"
   ],
   "dependencies": {
+    "arraybuffer-to-string": "^1.0.2",
     "djipevents": "^1.0.0-a",
     "is-array-buffer": "^1.0.1",
     "string-to-arraybuffer": "^1.0.2"
