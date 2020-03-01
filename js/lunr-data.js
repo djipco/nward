@@ -108,7 +108,6 @@ window.lunrData = {
           "includ",
           "list",
           "lt;async",
-          "nclude",
           "nward.getdevic",
           "paramet",
           "platform",
@@ -116,7 +115,6 @@ window.lunrData = {
           "return",
           "serial",
           "set",
-          "sserial",
           "static&gt",
           "systemat",
           "true",
@@ -667,7 +665,7 @@ window.lunrData = {
                     "docs": {
                       "Nward.html#.getDevices": {
                         "ref": "Nward.html#.getDevices",
-                        "tf": 2
+                        "tf": 4
                       }
                     }
                   }
@@ -1283,26 +1281,6 @@ window.lunrData = {
               }
             }
           },
-          "c": {
-            "docs": {},
-            "l": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "d": {
-                  "docs": {},
-                  "e": {
-                    "docs": {
-                      "Nward.html#.getDevices": {
-                        "ref": "Nward.html#.getDevices",
-                        "tf": 2
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "e": {
             "docs": {},
             "w": {
@@ -1395,7 +1373,7 @@ window.lunrData = {
                       },
                       "Nward.html#.getDevices": {
                         "ref": "Nward.html#.getDevices",
-                        "tf": 4
+                        "tf": 6
                       },
                       "Nward.html#.getSerialConnections": {
                         "ref": "Nward.html#.getSerialConnections",
@@ -1510,29 +1488,6 @@ window.lunrData = {
                               "tf": 25
                             }
                           }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "s": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "r": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "a": {
-                    "docs": {},
-                    "l": {
-                      "docs": {
-                        "Nward.html#.getDevices": {
-                          "ref": "Nward.html#.getDevices",
-                          "tf": 2
                         }
                       }
                     }
@@ -2621,7 +2576,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 155
+      "length": 153
     },
     "corpusTokens": [
       "activ",
@@ -2678,7 +2633,6 @@ window.lunrData = {
       "member",
       "method",
       "microcontrol",
-      "nclude",
       "newlin",
       "null",
       "nullable&gt",
@@ -2713,7 +2667,6 @@ window.lunrData = {
       "set",
       "simplifi",
       "specifi",
-      "sserial",
       "static&gt",
       "string",
       "succe",
@@ -2796,7 +2749,7 @@ window.lunrData = {
       "name": "getDevices",
       "tags": "Nward.getDevices getDevices",
       "summary": "",
-      "description": "Returns a list of sserial devices likely to be Arduino-compatible. This list will always include all Arduino-compatible devices but, depending on the platform, may also nclude other serial devices as well. If the all parameter is set to true, it will systematically return all serial devices."
+      "description": "Returns a list of serial devices likely to be Arduino-compatible. This list will always include all Arduino-compatible devices but, depending on the platform, may also include other serial devices as well. If the all parameter is set to true, it will systematically return all serial devices."
     },
     "Nward.html#.getSerialConnections": {
       "id": "Nward.html#.getSerialConnections",
