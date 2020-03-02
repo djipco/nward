@@ -3554,7 +3554,7 @@
     "Nward.html#send": {
       "id": "Nward.html#send",
       "kind": "function",
-      "title": "&lt;async&gt; send( data, appendNewline ) → {Promise.&lt;SendInfo&gt;}",
+      "title": "&lt;async&gt; send( data [, appendNewline ] ) → {Promise.&lt;SendInfo&gt;}",
       "longname": "Nward#send",
       "name": "send",
       "tags": "Nward#send send",
